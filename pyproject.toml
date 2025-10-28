@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68","wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mpfst"
+version = "0.1.0"
+description = "MPFST replication bundle: coherence metrics, spectral shell monitor, nulls, gating, fractional inversion, and domain adapters."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name="MPFST Authors"}]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.11",
+  "pandas>=2.1",
+  "matplotlib>=3.8",
+  "pywavelets>=1.5",
+  "statsmodels>=0.14",
+  "scikit-learn>=1.4",
+  "networkx>=3.2",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+eeg = ["mne>=1.5"]
+dev = ["pytest>=7.4", "pytest-cov>=4.1", "black>=24.0", "ruff>=0.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["mpfst*"]

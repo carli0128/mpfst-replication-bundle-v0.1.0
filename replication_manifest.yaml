@@ -1,0 +1,9 @@
+studies:
+  gw_vbk_gate:
+    entrypoint: mpfst.gating.linear_response:gw_vbk_cli
+    criteria:
+      - name: "Overtone suppression stronger inside (mℓ>m1 & VBK gate)"
+      - name: "β–p alignment tighter inside gate"
+    nulls:
+      - phase_randomize
+      - time_shuffle

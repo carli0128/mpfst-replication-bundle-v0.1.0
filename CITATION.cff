@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it."
+title: "MPFST Replication Bundle"
+authors:
+  - family-names: "MPFST"
+    given-names: "Working Group"
+version: "0.1.0"
+date-released: "2025-10-27"
+license: "Apache-2.0"
+repository-code: "https://github.com/your-org/mpfst-replication-bundle"
