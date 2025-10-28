@@ -1,5 +1,7 @@
 # MPFST Replication Bundle
 
+[![CI](https://github.com/carli0128/mpfst-replication-bundle-v0.1.0/actions/workflows/ci.yml/badge.svg)](https://github.com/carli0128/mpfst-replication-bundle-v0.1.0/actions/workflows/ci.yml)
+
 This package ships the analysis tools for the MPFST empirical tests:
 coherence triangle (μ, γ, H), mℓ meter, Spectral Shell Monitor (SSM) with octave shell‑jumps,
 nulls/controls, collapse, densification, and the fractional (α, β) prediction loop.
