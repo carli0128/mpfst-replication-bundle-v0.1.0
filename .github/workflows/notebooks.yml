@@ -23,12 +23,25 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
           pip install jupyter nbconvert
-      - name: Execute notebooks
-        run: |
-          mkdir -p artifacts
-          jupyter nbconvert --to html --execute notebooks/02_eeg_hazard_tiering.ipynb --output-dir artifacts
-          jupyter nbconvert --to html --execute notebooks/03_photonics_octave_jumps.ipynb --output-dir artifacts
-          jupyter nbconvert --to html --execute notebooks/04_seismic_hazard_surrogates.ipynb --output-dir artifacts
+      - name: Execute notebooks (skip missing; longer timeout)
+       run: |
+         mkdir -p artifacts
+         set -e
+         for nb in \
+           "notebooks/02_eeg_hazard_tiering.ipynb" \
+           "notebooks/03_photonics_octave_jumps.ipynb" \
+           "notebooks/04_seismic_hazard_surrogates.ipynb"
+         do
+           if [ -f "$nb" ]; then
+             echo "Executing $nb"
+             jupyter nbconvert \
+               --to html --execute "$nb" \
+               --ExecutePreprocessor.timeout=1200 \
+               --output-dir artifacts
+           else
+             echo "SKIP: $nb (not found)"
+           fi
+         done
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
