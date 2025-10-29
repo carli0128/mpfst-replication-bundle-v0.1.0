@@ -21,4 +21,7 @@ conda env create -f environment.yml
 conda activate mpfst-replication
 pip install -e .
 pytest -q
+ 
+# Optional: prefetch small open-access datasets (IRIS, GWOSC; EEG if MNE present)
+bash scripts/fetch_all_data.sh
 ```
