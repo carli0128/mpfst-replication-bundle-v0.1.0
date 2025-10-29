@@ -1,55 +1,12 @@
-name: Notebooks
+name: Notebooks (deprecated)
 
 on:
   workflow_dispatch: {}
-  push:
-    paths:
-      - 'notebooks/**'
-      - 'src/**'
-      - 'requirements.txt'
-      - 'pyproject.toml'
 
 jobs:
-  execute:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install deps
+      - name: Notebooks are executed in CI
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install -e .
-          pip install jupyter nbconvert mne requests jupyter_client nbclient ipykernel traitlets tornado
-      - name: Register kernel
-        run: |
-          python -m ipykernel install --user --name python3 --display-name "Python 3 (Actions)"
-      - name: Execute notebooks (skip missing; longer timeout)
-        env:
-          MPLBACKEND: Agg
-          JUPYTER_PATH: ~/.local/share/jupyter
-        run: |
-          mkdir -p artifacts
-          set -e
-          for nb in \
-            "notebooks/02_eeg_hazard_tiering.ipynb" \
-            "notebooks/03_photonics_octave_jumps.ipynb" \
-            "notebooks/04_seismic_hazard_surrogates.ipynb"
-          do
-            if [ -f "$nb" ]; then
-              echo "Executing $nb"
-              jupyter nbconvert \
-                --to html --execute "$nb" \
-                --ExecutePreprocessor.timeout=1200 \
-                --output-dir artifacts
-            else
-              echo "SKIP: $nb (not found)"
-            fi
-          done
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: notebook-reports
-          path: artifacts
+          echo "This workflow is deprecated. Notebooks are executed and artifacts uploaded by .github/workflows/ci.yml."

@@ -63,3 +63,18 @@ jobs:
           MPLBACKEND: Agg
           # Ensure Jupyter finds the user kernelspec path set above
           JUPYTER_PATH: ~/.local/share/jupyter
+
+      - name: Convert notebooks to HTML artifacts
+        run: |
+          mkdir -p artifacts
+          jupyter nbconvert --to html notebooks/02_eeg_hazard_tiering.ipynb --output-dir artifacts || true
+          jupyter nbconvert --to html notebooks/03_photonics_octave_jumps.ipynb --output-dir artifacts || true
+          jupyter nbconvert --to html notebooks/04_seismic_hazard_surrogates.ipynb --output-dir artifacts || true
+        env:
+          MPLBACKEND: Agg
+
+      - name: Upload notebook artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-html
+          path: artifacts
