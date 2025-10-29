@@ -25,8 +25,13 @@ jobs:
 
       - name: Install package and dev deps (incl. mne for EEG)
         run: |
+          python -m pip install --upgrade pip
+          # Project deps (editable install) and extras for tests/notebooks
           python -m pip install -e .
-          python -m pip install pytest pytest-cov nbconvert mne
+          # Repo requirements (e.g., obspy for seismic notebooks)
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+          # CI tooling
+          python -m pip install pytest pytest-cov nbconvert mne requests
 
       - name: Run tests
         run: pytest -q
@@ -50,3 +55,5 @@ jobs:
       - name: Run notebooks (include EEG)
         run: |
           RUN_EEG=true bash scripts/run_notebooks.sh
+        env:
+          MPLBACKEND: Agg
