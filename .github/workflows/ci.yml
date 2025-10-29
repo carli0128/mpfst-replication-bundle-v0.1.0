@@ -31,7 +31,11 @@ jobs:
           # Repo requirements (e.g., obspy for seismic notebooks)
           if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
           # CI tooling
-          python -m pip install pytest pytest-cov nbconvert mne requests
+          python -m pip install pytest pytest-cov nbconvert mne requests jupyter jupyter_client nbclient ipykernel traitlets tornado
+
+      - name: Register IPython kernel
+        run: |
+          python -m ipykernel install --user --name python3 --display-name "Python 3 (CI)"
 
       - name: Run tests
         run: pytest -q
@@ -57,3 +61,5 @@ jobs:
           RUN_EEG=true bash scripts/run_notebooks.sh
         env:
           MPLBACKEND: Agg
+          # Ensure Jupyter finds the user kernelspec path set above
+          JUPYTER_PATH: ~/.local/share/jupyter
