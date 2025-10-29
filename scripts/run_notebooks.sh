@@ -8,28 +8,35 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
+# Prefer project virtualenv Python if present
+if [[ -x ".venv/bin/python" ]]; then
+  PY=".venv/bin/python"
+else
+  PY="python3"
+fi
+
 # Ensure nbconvert is available
-python3 - <<'PY'
+if ! "$PY" - <<'PY'
 try:
-    import nbconvert  # noqa: F401
-    print('nbconvert: OK')
+  import nbconvert  # noqa: F401
+  print('nbconvert: OK')
 except Exception:
-    raise SystemExit(1)
+  raise SystemExit(1)
 PY
-if [[ $? -ne 0 ]]; then
-  python3 -m pip install --upgrade pip >/dev/null 2>&1 || true
-  python3 -m pip install nbconvert >/dev/null 2>&1
+then
+  "$PY" -m pip install --upgrade pip >/dev/null 2>&1 || true
+  "$PY" -m pip install nbconvert >/dev/null 2>&1
 fi
 
 # Photonics (uses synthetic if CSV missing)
-jupyter nbconvert --to notebook --execute notebooks/03_photonics_octave_jumps.ipynb --inplace
+"$PY" -m nbconvert --to notebook --execute notebooks/03_photonics_octave_jumps.ipynb --inplace
 
 # Seismic (ObsPy fetches a short window)
-jupyter nbconvert --to notebook --execute notebooks/04_seismic_hazard_surrogates.ipynb --inplace
+"$PY" -m nbconvert --to notebook --execute notebooks/04_seismic_hazard_surrogates.ipynb --inplace
 
 # EEG (optional; may download datasets via MNE)
 if [[ "${RUN_EEG:-false}" == "true" ]]; then
-  jupyter nbconvert --to notebook --execute notebooks/02_eeg_hazard_tiering.ipynb --inplace
+  "$PY" -m nbconvert --to notebook --execute notebooks/02_eeg_hazard_tiering.ipynb --inplace
 else
   echo "[info] Skipping EEG notebook (set RUN_EEG=true to include)."
 fi
